@@ -1,6 +1,7 @@
 import { User } from "../models/user.model.js";
 import { Snippet } from "../models/snippet.model.js";
 import { AppError } from "../utils/appError.js";
+import { Folder } from "../models/folder.model.js";
 
 // ==========================
 // 🔐 AUTH SERVICES
@@ -77,7 +78,7 @@ export const loginFunction = async ({ identifier, password }) => {
 // ==========================
 
 // CREATE SNIPPET
-export const createSnippetFunction = async ({ userId, title, description, code }) => {
+export const createSnippetFunction = async ({ userId, title, description, code, category, folderName }) => {
     if (!userId) throw new AppError("Unauthorized", 401);
     if (!title) throw new AppError("Title is required", 400);
     if (!code) throw new AppError("Code is required", 400);
@@ -90,7 +91,18 @@ export const createSnippetFunction = async ({ userId, title, description, code }
         description,
         code,
         user: userId,
+        category
     });
+
+    const folder = folderName ? folderName : "root";
+
+    let myFolder = await Folder.findOne({ name: folder, user: userId });
+    if (!myFolder) {
+        myFolder = await Folder.create({ name: folder, user: userId });
+    }
+
+    myFolder.snippets.push(snippet._id);
+    await myFolder.save();
 
     return {
         _id: snippet._id,
@@ -98,6 +110,7 @@ export const createSnippetFunction = async ({ userId, title, description, code }
         description: snippet.description,
         code: snippet.code,
         user: snippet.user,
+        isFavorite: snippet.isFavorite,
         createdAt: snippet.createdAt,
         updatedAt: snippet.updatedAt,
     };
@@ -105,10 +118,23 @@ export const createSnippetFunction = async ({ userId, title, description, code }
 
 
 // GET ALL SNIPPETS OF USER
-export const getAllSnippetsFunction = async ({ userId }) => {
+export const getAllSnippetsFunction = async ({ userId, folderName }) => {
     if (!userId) throw new AppError("Unauthorized", 401);
 
-    const snippets = await Snippet.find({ user: userId }).sort({ createdAt: -1 });
+    const folder = folderName ? folderName : "root";
+    const myFolder = await Folder.findOne({
+        name: folder, user: userId
+    }).populate("snippets");
+
+    if (!myFolder) {
+        throw new AppError("Folder not found", 404);
+    }
+
+    const snippets = myFolder.snippets;
+
+    if (snippets.length === 0) {
+        throw new AppError("No snippets found in this folder", 404);
+    }
 
     return snippets.map((s) => ({
         _id: s._id,
@@ -116,6 +142,7 @@ export const getAllSnippetsFunction = async ({ userId }) => {
         description: s.description,
         code: s.code,
         user: s.user,
+        isFavorite: s.isFavorite,
         createdAt: s.createdAt,
         updatedAt: s.updatedAt,
     }));
@@ -140,9 +167,30 @@ export const getSingleSnippetFunction = async ({ userId, snippetId }) => {
         description: snippet.description,
         code: snippet.code,
         user: snippet.user,
+        isFavorite: snippet.isFavorite,
         createdAt: snippet.createdAt,
         updatedAt: snippet.updatedAt,
     };
+};
+
+
+// LIST All Folders
+export const listAllFoldersFunction = async ({ userId }) => {
+    if (!userId) throw new AppError("Unauthorized", 401);
+
+    const folders = await Folder.find({ user: userId })
+
+    // unlist root folder if it exists
+    const rootIndex = folders.findIndex((f) => f.name === "root");
+    if (rootIndex !== -1) {
+        folders.splice(rootIndex, 1);
+    }
+
+    if (folders.length === 0) {
+        throw new AppError("No folders found", 404);
+    }
+
+    return folders;
 };
 
 
@@ -174,6 +222,73 @@ export const updateSnippetFunction = async ({ userId, snippetId, title, descript
         description: snippet.description,
         code: snippet.code,
         user: snippet.user,
+        isFavorite: snippet.isFavorite,
+        createdAt: snippet.createdAt,
+        updatedAt: snippet.updatedAt,
+    };
+};
+
+
+// MARK SNIPPET AS FAVORITE
+export const markSnippetAsFavoriteFunction = async ({ userId, snippetId }) => {
+    if (!userId) throw new AppError("Unauthorized", 401);
+    if (!snippetId) throw new AppError("Snippet ID required", 400);
+
+    const snippet = await Snippet.findById(snippetId);
+    if (!snippet) throw new AppError("Snippet not found", 404);
+
+    if (snippet.user.toString() !== userId.toString()) {
+        throw new AppError("You do not have permission to favorite this snippet", 403);
+    }
+
+    snippet.isFavorite = !snippet.isFavorite;
+    await snippet.save();
+
+    return {
+        _id: snippet._id,
+        title: snippet.title,
+        description: snippet.description,
+        code: snippet.code,
+        user: snippet.user,
+        isFavorite: snippet.isFavorite,
+        createdAt: snippet.createdAt,
+        updatedAt: snippet.updatedAt,
+    };
+};
+
+// GET ALL FAVORITE SNIPPETS
+export const getAllFavoriteSnippetsFunction = async ({ userId }) => {
+    if (!userId) throw new AppError("Unauthorized", 401);
+
+    const snippets = await Snippet.find({ user: userId, isFavorite: true }).sort({ createdAt: -1 });
+
+    return snippets.map((s) => ({
+        _id: s._id,
+        title: s.title,
+        description: s.description,
+        code: s.code,
+        user: s.user,
+        isFavorite: s.isFavorite,
+        createdAt: s.createdAt,
+        updatedAt: s.updatedAt,
+    }));
+};
+
+// GET SINGLE FAVORITE SNIPPET
+export const getSingleFavoriteSnippetFunction = async ({ userId, snippetId }) => {
+    if (!userId) throw new AppError("Unauthorized", 401);
+    if (!snippetId) throw new AppError("Snippet ID required", 400);
+
+    const snippet = await Snippet.findOne({ _id: snippetId, user: userId, isFavorite: true });
+    if (!snippet) throw new AppError("Favorite snippet not found", 404);
+
+    return {
+        _id: snippet._id,
+        title: snippet.title,
+        description: snippet.description,
+        code: snippet.code,
+        user: snippet.user,
+        isFavorite: snippet.isFavorite,
         createdAt: snippet.createdAt,
         updatedAt: snippet.updatedAt,
     };

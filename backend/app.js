@@ -7,7 +7,10 @@ import cookieParser from "cookie-parser";
 export const app = express();
 
 const appMiddware = [
-  cors(),
+  cors({
+	  origin: 'http://localhost:5173',
+    	  credentials: true,
+  }),
   express.json(),
   express.urlencoded({ extended: true }),
   cookieParser()

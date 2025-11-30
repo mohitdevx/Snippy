@@ -20,6 +20,14 @@ const snippetSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
+    },
+    category: {
+        type: String,
+        enum: ['snippet', 'notes']
+    },
+    isFavorite: {
+        type: Boolean,
+        default: false,
     }
 }, {
     timestamps: true,

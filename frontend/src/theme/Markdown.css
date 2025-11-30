@@ -1,0 +1,286 @@
+.markdown-theme {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #E5E7EB;
+  max-width: 800px;
+  margin: 0 auto;
+  word-wrap: break-word;
+}
+
+/* Headings */
+.markdown-theme h1,
+.markdown-theme h2,
+.markdown-theme h3,
+.markdown-theme h4,
+.markdown-theme h5,
+.markdown-theme h6 {
+  font-weight: 600;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+  margin-top: 1.5em;
+}
+
+.markdown-theme h1 {
+  font-size: 2.2em;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.3em;
+  background: linear-gradient(135deg, #60A5FA 0%, #34D399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.markdown-theme h2 {
+  font-size: 1.9em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.3em;
+  background: linear-gradient(135deg, #93C5FD 0%, #6EE7B7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.markdown-theme h3 {
+  font-size: 1.6em;
+  color: #BFDBFE;
+}
+
+.markdown-theme h4 {
+  font-size: 1.3em;
+  color: #DBEAFE;
+}
+
+.markdown-theme h5 {
+  font-size: 1.1em;
+  color: #E0F2FE;
+}
+
+.markdown-theme h6 {
+  font-size: 1em;
+  color: #F0F9FF;
+}
+
+/* Paragraphs */
+.markdown-theme p {
+  margin-bottom: 1em;
+  font-size: 1.05em;
+}
+
+/* Links */
+.markdown-theme a {
+  color: #60A5FA;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.markdown-theme a:hover {
+  color: #34D399;
+  border-bottom: 1px solid #34D399;
+  text-decoration: none;
+}
+
+/* Lists */
+.markdown-theme ul,
+.markdown-theme ol {
+  padding-left: 1.5em;
+  margin-bottom: 1em;
+}
+
+.markdown-theme ul {
+  list-style-type: disc;
+}
+
+.markdown-theme ol {
+  list-style-type: decimal;
+}
+
+.markdown-theme li {
+  margin-bottom: 0.5em;
+}
+
+/* Blockquotes */
+.markdown-theme blockquote {
+  border-left: 4px solid;
+  border-image: linear-gradient(to bottom, #60A5FA, #34D399) 1;
+  padding: 0.6em 1em;
+  margin: 1.2em 0;
+  color: #BFDBFE;
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.08) 0%, rgba(52, 211, 153, 0.08) 100%);
+  font-style: italic;
+  border-radius: 0 8px 8px 0;
+}
+
+/* Code Blocks */
+.markdown-theme pre {
+  padding: 1em;
+  overflow-x: auto;
+  border-radius: 8px;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #E5E7EB;
+  backdrop-filter: blur(10px);
+}
+
+.markdown-theme code {
+  font-family: "Fira Code", monospace;
+  font-size: 0.95em;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 3px 8px;
+  color: #34D399;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.markdown-theme pre code {
+  background: none;
+  padding: 0;
+  color: #E5E7EB;
+  border: none;
+}
+
+/* Tables */
+.markdown-theme table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1em;
+  border-radius: 8px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.markdown-theme th,
+.markdown-theme td {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px;
+}
+
+.markdown-theme th {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.15) 0%, rgba(52, 211, 153, 0.15) 100%);
+  font-weight: 600;
+  text-align: left;
+  color: #F9FAFB;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.markdown-theme td {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Horizontal Rule */
+.markdown-theme hr {
+  border: 0;
+  border-top: 1px solid;
+  border-image: linear-gradient(to right, transparent, #60A5FA, #34D399, transparent) 1;
+  margin: 2em 0;
+}
+
+/* Images */
+.markdown-theme img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0.5em 0;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Task lists */
+.markdown-theme input[type="checkbox"] {
+  margin-right: 0.5em;
+  accent-color: #60A5FA;
+  transform: scale(1.1);
+}
+
+/* Selection */
+.markdown-theme ::selection {
+  background: rgba(96, 165, 250, 0.3);
+  color: #FFFFFF;
+}
+
+.markdown-theme ::-moz-selection {
+  background: rgba(96, 165, 250, 0.3);
+  color: #FFFFFF;
+}
+
+/* Scrollbar for code blocks */
+.markdown-theme pre::-webkit-scrollbar {
+  height: 6px;
+}
+
+.markdown-theme pre::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.markdown-theme pre::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #60A5FA, #34D399);
+  border-radius: 3px;
+}
+
+/* Custom Scrollbar for Markdown Editor and Preview Components */
+
+/* Main scrollbar container */
+.markdown-editor-container ::-webkit-scrollbar,
+.markdown-preview-container ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* Scrollbar track */
+.markdown-editor-container ::-webkit-scrollbar-track,
+.markdown-preview-container ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  margin: 2px;
+}
+
+/* Scrollbar thumb */
+.markdown-editor-container ::-webkit-scrollbar-thumb,
+.markdown-preview-container ::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.6), rgba(52, 211, 153, 0.6));
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Scrollbar thumb hover */
+.markdown-editor-container ::-webkit-scrollbar-thumb:hover,
+.markdown-preview-container ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.8), rgba(52, 211, 153, 0.8));
+}
+
+/* Scrollbar thumb active */
+.markdown-editor-container ::-webkit-scrollbar-thumb:active,
+.markdown-preview-container ::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 1), rgba(52, 211, 153, 1));
+}
+
+/* Corner */
+.markdown-editor-container ::-webkit-scrollbar-corner,
+.markdown-preview-container ::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox scrollbar */
+.markdown-editor-container,
+.markdown-preview-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(96, 165, 250, 0.6) rgba(255, 255, 255, 0.05);
+}
+
+/* For code blocks inside preview */
+.markdown-preview-container pre::-webkit-scrollbar {
+  height: 6px;
+}
+
+.markdown-preview-container pre::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+}
+
+.markdown-preview-container pre::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.8), rgba(168, 85, 247, 0.8));
+  border-radius: 3px;
+}

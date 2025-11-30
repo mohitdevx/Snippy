@@ -1,7 +1,7 @@
 import { asyncError } from "../utils/asyncError.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { Cookie } from "../config/cookies.config.js";
-import { registerFunction, loginFunction, createSnippetFunction, getAllSnippetsFunction, getSingleSnippetFunction, updateSnippetFunction } from "../services/user.service.js";
+import { registerFunction, loginFunction, createSnippetFunction, getAllSnippetsFunction, getSingleSnippetFunction, updateSnippetFunction, markSnippetAsFavoriteFunction, getAllFavoriteSnippetsFunction, getSingleFavoriteSnippetFunction, listAllFoldersFunction } from "../services/user.service.js";
 
 // =============================
 // 🔐 AUTH CONTROLLERS
@@ -68,13 +68,15 @@ export const getUserProfile = asyncError(async (req, res) => {
 // CREATE SNIPPET
 export const createSnippet = asyncError(async (req, res) => {
     const userId = req.user._id;
-    const { title, description, code } = req.body;
+    const { title, description, code, category, folderName } = req.body;
 
     const snippet = await createSnippetFunction({
         userId,
         title,
         description,
-        code
+        code,
+        category,
+        folderName
     });
 
     return ApiResponse.success(
@@ -89,8 +91,9 @@ export const createSnippet = asyncError(async (req, res) => {
 // GET ALL SNIPPETS OF USER
 export const getAllSnippets = asyncError(async (req, res) => {
     const userId = req.user._id;
+    const { folderName } = req.query;
 
-    const snippets = await getAllSnippetsFunction({ userId });
+    const snippets = await getAllSnippetsFunction({ userId, folderName });
 
     return ApiResponse.success(
         res,
@@ -120,6 +123,20 @@ export const getSingleSnippet = asyncError(async (req, res) => {
 });
 
 
+// LIST ALL FOLDERS
+export const listAllFolders = asyncError(async (req, res) => {
+    const userId = req.user._id;
+
+    const folders = await listAllFoldersFunction({ userId });
+
+    return ApiResponse.success(
+        res,
+        200,
+        "Fetched all folders successfully",
+        { folders }
+    );
+});
+
 // UPDATE SNIPPET
 export const updateSnippet = asyncError(async (req, res) => {
     const userId = req.user._id;
@@ -138,6 +155,59 @@ export const updateSnippet = asyncError(async (req, res) => {
         res,
         200,
         "Snippet updated successfully",
+        { snippet }
+    );
+});
+
+
+// MARK SNIPPET AS FAVORITE
+export const markSnippetAsFavorite = asyncError(async (req, res) => {
+    const userId = req.user._id;
+    const snippetId = req.params.id;
+
+    const snippet = await markSnippetAsFavoriteFunction({
+        userId,
+        snippetId
+    });
+
+    return ApiResponse.success(
+        res,
+        200,
+        "Snippet marked as favorite successfully",
+        { snippet }
+    );
+});
+
+
+// GET ALL FAVORITE SNIPPETS
+export const getAllFavoriteSnippets = asyncError(async (req, res) => {
+    const userId = req.user._id;
+
+    const snippets = await getAllFavoriteSnippetsFunction({ userId, isFavorite: true });
+
+    return ApiResponse.success(
+        res,
+        200,
+        "Fetched all favorite snippets successfully",
+        { snippets }
+    );
+});
+
+// GET SINGLE FAVORITE SNIPPET
+export const getSingleFavoriteSnippet = asyncError(async (req, res) => {
+    const userId = req.user._id;
+    const snippetId = req.params.id;
+
+    const snippet = await getSingleFavoriteSnippetFunction({
+        userId,
+        snippetId,
+        isFavorite: true
+    });
+
+    return ApiResponse.success(
+        res,
+        200,
+        "Favorite snippet fetched successfully",
         { snippet }
     );
 });
