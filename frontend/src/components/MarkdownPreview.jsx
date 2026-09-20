@@ -36,7 +36,7 @@ export const MarkdownPreview = ({ content, preview = false }) => {
             <div className="flex-1 p-6 text-gray-100 overflow-y-auto">
                 {content ? (
                     <div className="prose prose-invert max-w-none">
-                        <div className="markdown-theme" dangerouslySetInnerHTML={{ __html: compileMarkdown(content) }}></div>
+                        <div className="markdown-theme" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(compileMarkdown(content)) }></div>
                     </div>
                 ) : (
                     <div className="flex items-center justify-center h-full text-gray-500">
